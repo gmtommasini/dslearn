@@ -16,8 +16,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.devsuperior.dslearnbds.Enrollment;
-
 @Entity
 @Table(name = "tb_lessons")
 @Inheritance(strategy = InheritanceType.JOINED)
