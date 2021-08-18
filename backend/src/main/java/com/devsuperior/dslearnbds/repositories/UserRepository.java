@@ -6,5 +6,7 @@ import com.devsuperior.dslearnbds.entities.User;
 
 public interface UserRepository extends JpaRepository<User, Long>{	
 	
+	/* the framework build the function automatically when we write "findByFieldName" */
+	User findByEmail(String email);
 
 }
