@@ -1,7 +1,9 @@
 package com.devsuperior.dslearnbds.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -30,7 +33,11 @@ public class User implements Serializable {
 	@JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "user_id"), // from this class
 			inverseJoinColumns = @JoinColumn(name = "role_id")) // from Set<> class
 	private Set<Role> roles = new HashSet<>();
-
+	
+	@OneToMany(mappedBy = "user") // mappedBy attribute name in Notification class; in this case "user"
+	private List<Notification> notifications = new ArrayList<>();
+	
+	
 	public User() {
 	}
 
@@ -80,9 +87,9 @@ public class User implements Serializable {
 		return roles;
 	}
 
-	public void setRoles(Set<Role> roles) {
-		this.roles = roles;
-	}
+//	public void setRoles(Set<Role> roles) {
+//		this.roles = roles;
+//	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -94,6 +101,12 @@ public class User implements Serializable {
 		int result = 1;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
+	}
+	
+	
+
+	public List<Notification> getNotifications() {
+		return notifications;
 	}
 
 	@Override
