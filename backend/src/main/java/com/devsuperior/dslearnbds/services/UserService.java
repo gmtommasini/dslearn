@@ -7,9 +7,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.devsuperior.dslearnbds.dto.UserDTO;
 import com.devsuperior.dslearnbds.entities.User;
 import com.devsuperior.dslearnbds.repositories.UserRepository;
+import com.devsuperior.dslearnbds.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService implements UserDetailsService{
@@ -20,6 +23,15 @@ public class UserService implements UserDetailsService{
 	private UserRepository repository;
 //	@Autowired
 //	private RoleRepository roleRepository;
+	
+	
+	@Transactional(readOnly = true)
+	public UserDTO findById(Long id) {
+		User obj = repository.findById(id) //findById returns an optional<>
+				.orElseThrow(() -> new ResourceNotFoundException(
+						"User '" + id + "' not found"));
+		return new UserDTO(obj);
+	}
 	
 	@Override
 	public UserDetails loadUserByUsername(String username) // username is the email in this case
