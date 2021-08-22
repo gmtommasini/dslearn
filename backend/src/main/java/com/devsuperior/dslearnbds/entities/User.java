@@ -24,7 +24,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name="tb_users")
+@Table(name = "tb_users")
 public class User implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
 
@@ -39,11 +39,10 @@ public class User implements Serializable, UserDetails {
 	@JoinTable(name = "tb_user_role", joinColumns = @JoinColumn(name = "user_id"), // from this class
 			inverseJoinColumns = @JoinColumn(name = "role_id")) // from Set<> class
 	private Set<Role> roles = new HashSet<>();
-	
+
 	@OneToMany(mappedBy = "user") // mappedBy attribute name in Notification class; in this case "user"
 	private List<Notification> notifications = new ArrayList<>();
-	
-	
+
 	public User() {
 	}
 
@@ -106,8 +105,6 @@ public class User implements Serializable, UserDetails {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
-	
-	
 
 	public List<Notification> getNotifications() {
 		return notifications;
@@ -129,11 +126,13 @@ public class User implements Serializable, UserDetails {
 			return false;
 		return true;
 	}
-	
-	/* from UserDetails interface*/
+
+	/* from UserDetails interface */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return roles.stream().map(role -> new SimpleGrantedAuthority(role.getAuthority())).collect(Collectors.toList());
+		return roles.stream()
+				.map(role -> new SimpleGrantedAuthority(role.getAuthority()))
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -161,4 +160,12 @@ public class User implements Serializable, UserDetails {
 		return true; // To be implemented in the future if needed
 	}
 
+	public boolean hasHole(String roleName) {
+		for (Role role : roles) {
+			if (role.getAuthority().equals(roleName)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }
